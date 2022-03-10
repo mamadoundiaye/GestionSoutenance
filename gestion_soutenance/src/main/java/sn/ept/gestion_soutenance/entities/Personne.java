@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
@@ -25,6 +27,9 @@ import javax.persistence.Transient;
  * @author ssidibe
  */
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Personne.findAll", query = "SELECT e FROM Personne e")
+})
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Personne implements Serializable {
 
@@ -32,29 +37,28 @@ public class Personne implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     private String nom;
-    
+
     private String prenom;
-    
-    
+
     @Temporal(TemporalType.DATE)
     private Date dateNaissance;
-    
+
     private String lieuNaissance;
-    
-    @Column(name = "EMAIL_PROFESSIONNEL",unique = true, nullable=false)
+
+    @Column(name = "EMAIL_PROFESSIONNEL", unique = true, nullable = false)
     private String emailPro;
-    
-    @Column(name = "EMAIL_PERSONNEL",nullable = true, unique = true)
+
+    @Column(name = "EMAIL_PERSONNEL", nullable = true, unique = true)
     private String emailPerso;
-    
+
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateEnregistrement;
-    
+
     @Transient
     private Integer age;
-    
+
     @OneToOne(mappedBy = "etudiant")
     private Memoire memoire;
 
@@ -67,9 +71,6 @@ public class Personne implements Serializable {
     public Personne() {
     }
 
-    
-    
-    
     public Date getDateEnregistrement() {
         return dateEnregistrement;
     }
@@ -85,8 +86,6 @@ public class Personne implements Serializable {
     public void setAge(Integer age) {
         this.age = age;
     }
-    
-    
 
     public Integer getId() {
         return id;
@@ -165,13 +164,12 @@ public class Personne implements Serializable {
         final Personne other = (Personne) obj;
         return Objects.equals(this.id, other.id);
     }
-    
+
     @PrePersist
-    public void avantEnregistrement(){
+    public void avantEnregistrement() {
         dateEnregistrement = new Date();
     }
 
-    //ngfarimata@ept.sn
-  
-    
+    // ngfarimata@ept.sn
+
 }
